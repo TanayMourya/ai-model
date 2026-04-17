@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Tutor</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      padding: 40px;
+      border-radius: 20px;
+      width: 400px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #7c3aed;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #6d28d9;
+    }
+
+    #response {
+      margin-top: 20px;
+      min-height: 40px;
+      color: #cbd5f5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>🧠 AI Tutor</h1>
+
+    <input id="question" type="text" placeholder="Ask something..." />
+
+    <button onclick="askAI()">Ask AI</button>
+
+    <p id="response"></p>
+  </div>
+
+  <script>
+    async function askAI() {
+      const q = document.getElementById("question").value;
+      const res = document.getElementById("response");
+
+      if (!q) {
+        res.innerText = "Enter a question";
+        return;
+      }
+
+      res.innerText = "Thinking... 🤖";
+
+      try {
+        const response = await fetch("http://localhost:5000/ai", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ question: q }),
+        });
+
+        const data = await response.json();
+        res.innerText = data.answer;
+
+      } catch {
+        res.innerText = "⚠️ Server not connected";
+      }
+    }
+  </script>
+
+</body>
+</html>
